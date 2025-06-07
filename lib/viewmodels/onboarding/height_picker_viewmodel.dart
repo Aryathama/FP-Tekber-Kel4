@@ -51,6 +51,11 @@ class HeightPickerViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+void setInitialScrollOffset(double offset) {
+  _scrollOffset = offset;
+  notifyListeners();
+}
+
   String getFormattedHeight() {
     if (_isCmSelected) {
       return '${_currentHeightCm.round()} cm';

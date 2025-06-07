@@ -124,6 +124,11 @@ class BMIDetailScreen extends StatelessWidget {
                         // Anda bisa menavigasi ke HomePage di sini.
                         // Contoh:
                         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Text('Welcome to Homepage!')), // Ganti dengan HomePage() Anda
+                          (Route<dynamic> route) => false, // Hapus semua route sebelumnya
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green[600],

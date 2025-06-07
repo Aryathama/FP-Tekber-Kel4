@@ -26,12 +26,13 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
       duration: Duration(milliseconds: 300),
     );
 
-    // Inisialisasi ViewModel dengan tinggi yang ada di userProfile jika ada
     final viewModel = Provider.of<HeightPickerViewModel>(context, listen: false);
+    // Jika UserProfile.height sudah ada (misal dari edit profil), set nilai awal
     if (widget.userProfile.height != null) {
-      // Set initial height from userProfile if available
-      viewModel.updateScrollAndHeight(
-          -(widget.userProfile.height! - viewModel.minHeightCm) * viewModel.pixelsPerCm + viewModel.scrollOffset);
+      // Hitung scrollOffset berdasarkan tinggi yang ada di userProfile
+      // Ini sedikit tricky karena kita perlu offset relatif terhadap titik awal
+      final initialOffset = (widget.userProfile.height! - viewModel.minHeightCm) * viewModel.pixelsPerCm;
+      viewModel.setInitialScrollOffset(initialOffset); // Tambahkan method ini di ViewModel
     }
   }
 
@@ -46,26 +47,23 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
   }
 
   void _handleHorizontalDragEnd(DragEndDetails details, HeightPickerViewModel viewModel) {
+    // Animasi untuk snapping
     _animation = Tween<double>(
       begin: viewModel.currentHeightCm,
       end: viewModel.currentHeightCm.roundToDouble(),
     ).animate(_animationController)
       ..addListener(() {
-        // Menggunakan updateScrollAndHeight untuk menyesuaikan scrollOffset juga
-        viewModel.updateScrollAndHeight(
-            -(_animation.value - viewModel.currentHeightCm)); // Delta yang diperlukan
-        // Perlu memanggil notifyListeners di ViewModel untuk update animasi di sini.
-        // Atau, lebih baik, ViewModel hanya akan menyediakan nilai akhir, dan animasi terjadi di View
-        // Untuk demo ini, kita biarkan ViewModel mengelola state, View hanya memicu
+        // Ini akan memicu UI update selama animasi
+        // Namun, kita tidak update state di sini lagi karena ViewModel sudah mengurusnya
       });
     _animationController.forward(from: 0.0).then((_) {
       viewModel.snapHeight(); // Panggil snapHeight setelah animasi selesai
+      _animationController.reset(); // Reset controller untuk penggunaan berikutnya
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Watch the ViewModel for changes
     return Consumer<HeightPickerViewModel>(
       builder: (context, viewModel, child) {
         return Scaffold(
@@ -116,7 +114,7 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
                     onHorizontalDragUpdate: (details) => _handleHorizontalDragUpdate(details, viewModel),
                     onHorizontalDragEnd: (details) => _handleHorizontalDragEnd(details, viewModel),
                     child: CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 100.0), // _rulerHeight
+                      size: Size(MediaQuery.of(context).size.width, 100.0),
                       painter: RulerPainter(
                         minHeight: viewModel.minHeightCm,
                         maxHeight: viewModel.maxHeightCm,
@@ -149,7 +147,7 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
                             MaterialPageRoute(
                               builder: (context) => ChangeNotifierProvider(
                                 create: (_) => GenderPickerViewModel(),
-                                child: GenderPickerScreen(userProfile: updatedProfile),
+                                child: GenderPickerScreen(userProfile: updatedProfile), // Teruskan UserProfile
                               ),
                             ),
                           );
@@ -170,8 +168,8 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
                       SizedBox(height: 16),
                       TextButton(
                         onPressed: () {
-                          print('Back pressed!');
-                          Navigator.pop(context);
+                          print('Back pressed from HeightPickerScreen!');
+                          Navigator.pop(context); // Kembali ke layar sebelumnya (jika ada, atau keluar app)
                         },
                         child: Text(
                           'Back',

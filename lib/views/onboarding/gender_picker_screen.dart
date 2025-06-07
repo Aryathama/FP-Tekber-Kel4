@@ -39,6 +39,7 @@ class GenderPickerScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 60),
 
+                  // ... (kode _buildGenderOptionCard tetap sama) ...
                   _buildGenderOptionCard(
                     context,
                     icon: 'assets/female_avatar.png',
@@ -57,6 +58,7 @@ class GenderPickerScreen extends StatelessWidget {
                     isSelected: viewModel.selectedGender == Gender.male,
                     onTap: () => viewModel.selectGender(Gender.male),
                   ),
+                  // ... (end _buildGenderOptionCard) ...
 
                   Spacer(),
 
@@ -65,11 +67,18 @@ class GenderPickerScreen extends StatelessWidget {
                         ? () {
                             // Update userProfile dengan gender yang dipilih
                             final updatedProfile = userProfile.copyWith(gender: viewModel.selectedGender);
-                            print('Finish pressed! Selected Gender: ${updatedProfile.gender?.name}');
-                            // Contoh: Tambahkan data dummy age dan weight jika belum ada dari layar sebelumnya
-                            final finalProfile = updatedProfile.copyWith(age: 19, weight: 62); // Ganti dengan input asli
-                            
-                            Navigator.pushReplacement( // Menggunakan pushReplacement untuk keluar dari alur onboarding
+
+                            // Tambahkan data dummy age dan weight jika belum ada dari layar sebelumnya
+                            // Di aplikasi nyata, ini akan datang dari layar input Age dan Weight
+                            final finalProfile = updatedProfile.copyWith(
+                              age: 19,    // Ganti dengan input asli dari layar Age
+                              weight: 62, // Ganti dengan input asli dari layar Weight
+                            );
+
+                            print('Finish pressed! Final UserProfile: ${finalProfile}');
+
+                            // Gunakan pushReplacement agar pengguna tidak bisa kembali ke onboarding
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChangeNotifierProvider(
@@ -98,8 +107,8 @@ class GenderPickerScreen extends StatelessWidget {
 
                   TextButton(
                     onPressed: () {
-                      print('Back pressed!');
-                      Navigator.pop(context);
+                      print('Back pressed from GenderPickerScreen!');
+                      Navigator.pop(context); // Kembali ke HeightPickerScreen
                     },
                     child: Text(
                       'Back',
