@@ -63,6 +63,7 @@ flutter:
     - assets/facebook.jpg
     - assets/avocado_dish.jpg
     - assets/avocado_icon.png
+    - assets/logo.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
