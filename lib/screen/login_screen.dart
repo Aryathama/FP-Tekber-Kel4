@@ -1,47 +1,55 @@
 import 'package:flutter/material.dart';
+import 'auth_service.dart';
+import 'register_screen.dart';
 import 'dashboard_screen.dart';
-import 'sign_up_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final authService = AuthService();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              // Back button
               IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
+              // Login title
               const Text(
                 'Login',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: Color(0xFF2E7D32),
                 ),
               ),
               const SizedBox(height: 8),
               const Text(
                 'Please log into your account to continue',
-                style: TextStyle(fontSize: 16, color: Colors.black54),
+                style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
               const SizedBox(height: 32),
+              // Email / Username
               const Text(
                 'Username / Email',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   hintText: 'Your username or your email',
                   border: OutlineInputBorder(
@@ -50,24 +58,30 @@ class LoginScreen extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
+              // Password
               const Text(
                 'Password',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Your password',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.visibility),
+                    onPressed: () {},
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  suffixIcon: Icon(Icons.visibility),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
+              // Forgot Password link
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -78,107 +92,60 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
+              // Sign in button
               SizedBox(
                 width: double.infinity,
+                height: 48,
                 child: ElevatedButton(
-                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: const Color(0xFF4CAF50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    backgroundColor: Colors.green,
                   ),
+                  onPressed: () async {
+                    final user = await authService.login(
+                      emailController.text,
+                      passwordController.text,
+                    );
+                    if (user != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Login berhasil')),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Login gagal')),
+                      );
+                    }
+                  },
                   child: const Text(
                     'Sign in',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              Row(
-                children: const [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text('or login with'),
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
+              // Register text
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    icon: Image.asset(
-                      'assets/google.png',
-                      width: 40,
-                      height: 40,
-                    ),
-                    onPressed: () {},
-                  ),
-                  const SizedBox(width: 16),
-                  IconButton(
-                    icon: Image.asset(
-                      'assets/facebook.jpg',
-                      width: 40,
-                      height: 40,
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have account? "),
-                  GestureDetector(
-                    onTap: () {
+                  const Text('Belum punya akun? '),
+                  TextButton(
+                    onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignUpScreen()),
+                        MaterialPageRoute(builder: (_) => RegisterScreen()),
                       );
                     },
-                    child: const Text(
-                      'Create one here',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  )
+                    child: const Text('Register'),
+                  ),
                 ],
-              ),
-              const SizedBox(height: 24),
-              // Tombol ke Dashboard
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    backgroundColor: Colors.green.shade700,
-                  ),
-                  child: const Text(
-                    'Masuk ke Dashboard',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
+              )
             ],
           ),
         ),
