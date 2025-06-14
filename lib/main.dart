@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:firebase_core/firebase_core.dart';
-<<<<<<< HEAD
-import 'firebase_options.dart';
-import 'dart:async';
-
-// Import screen lain
-=======
->>>>>>> parent of 1f8ce0c (login dan register (fix))
-=======
-import 'firebase_options.dart'; // ⬅️ Tambahkan ini
->>>>>>> parent of 5b6f44e (splash screen ketinggalan)
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
+// import 'dart:async';
+// // Import screen lain
+// import 'firebase_options.dart'; // ⬅️ Tambahkan ini
 import 'screen/login_screen.dart';
+import 'views/onboarding1.dart';
+import 'views/onboarding2.dart';
+import 'views/onboarding3.dart';
 
 void main() => runApp(const MyApp());
 
@@ -23,7 +19,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Health Tracker App',
       theme: ThemeData(primarySwatch: Colors.teal),
-      home: LoginScreen(),
+      initialRoute: '/login',
+      routes: {
+        '/login': (_) => const LoginScreen(),
+        '/onboarding1': (_) => const Onboarding1Page(),
+        '/onboarding2': (_) => const Onboarding2Page(),
+        '/onboarding3': (_) => const Onboarding3Page(),
+      },
     );
   }
 }
