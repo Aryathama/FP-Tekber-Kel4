@@ -1,4 +1,4 @@
-# nutricore_fe
+# nutricore
 
 A new Flutter project.
 

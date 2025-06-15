@@ -45,7 +45,7 @@ class MacroProgressCard extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         Text(
-          '$current/$target' + 'g',
+          '$current/$target' 'g',
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
       ],

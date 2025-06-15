@@ -44,10 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Secret files
 secrets.json
-
-# Firebase local config files
-google-services.json
-
 test/unit_test.mocks.dart
+google-services.json
+lib/services/local/firebase_options.dart
