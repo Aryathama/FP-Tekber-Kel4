@@ -1,5 +1,5 @@
-name: nutricore_fe
-description: "A new Flutter project."
+name: nutricore
+description: "A Flutter-based nutrition analysis app powered by gemini and nutritionix."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -33,13 +33,26 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  cloud_firestore: ^4.15.8
   cupertino_icons: ^1.0.8
-  go_router: ^15.1.3
+  firebase_core: ^2.27.0
+  firebase_auth: 4.16.0
   flutter_svg: ^2.0.9
+  go_router: ^15.1.3
+  google_fonts: ^6.2.1
+  http: ^1.2.0
+  image_picker: ^1.0.7
+  intl: ^0.19.0
+  provider: ^6.1.2
+  
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.4.4
+  build_runner: ^2.4.8
+  rename: ^3.0.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
