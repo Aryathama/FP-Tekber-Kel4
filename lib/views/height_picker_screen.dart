@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/viewmodels/onboarding/height_picker_viewmodel.dart'; // Sesuaikan path
-import '/viewmodels/onboarding/gender_picker_viewmodel.dart'; // Sesuaikan path
+import '../viewmodels/height_picker_viewmodel.dart'; // Sesuaikan path
+import '../viewmodels/gender_picker_viewmodel.dart'; // Sesuaikan path
 import 'package:provider/provider.dart';
 import '/models/user_profile.dart'; // Untuk meneruskan data
-import '/views/onboarding/gender_picker_screen.dart'; // Untuk navigasi
+import '/views/gender_picker_screen.dart'; // Untuk navigasi
 
 class HeightPickerScreen extends StatefulWidget {
   final UserProfile userProfile; // Menerima UserProfile dari layar sebelumnya

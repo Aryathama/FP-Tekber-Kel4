@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '/models/user_profile.dart'; // Sesuaikan path
-import '/viewmodels/onboarding/gender_picker_viewmodel.dart'; // Sesuaikan path
-import '/viewmodels/onboarding/bmi_detail_viewmodel.dart'; // Untuk navigasi
-import '/views/onboarding/bmi_detail_screen.dart'; // Untuk navigasi
+import '../viewmodels/gender_picker_viewmodel.dart'; // Sesuaikan path
+import '../viewmodels/bmi_detail_viewmodel.dart'; // Untuk navigasi
+import '/views/bmi_detail_screen.dart'; // Untuk navigasi
 import 'package:provider/provider.dart';
 
 class GenderPickerScreen extends StatelessWidget {

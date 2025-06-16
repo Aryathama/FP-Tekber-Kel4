@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/viewmodels/onboarding/bmi_detail_viewmodel.dart'; // Sesuaikan path
+import '../viewmodels/bmi_detail_viewmodel.dart'; // Sesuaikan path
 import '/models/user_profile.dart'; // Untuk meneruskan data
 import 'package:provider/provider.dart';
 // Jika Anda punya HomePage, import di sini:
