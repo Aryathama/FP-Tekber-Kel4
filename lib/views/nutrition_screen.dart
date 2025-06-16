@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../api/api_service.dart';
+import '../services/api/api_service.dart';
 import '../models/nutrition_model.dart';
 
 class NutritionScreen extends StatefulWidget {
