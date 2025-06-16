@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-<<<<<<< HEAD
 import 'firebase_options.dart';
 import 'dart:async';
-
 // Import screen lain
-=======
->>>>>>> parent of 1f8ce0c (login dan register (fix))
-=======
+
 import 'firebase_options.dart'; // ⬅️ Tambahkan ini
->>>>>>> parent of 5b6f44e (splash screen ketinggalan)
 import 'screen/login_screen.dart';
 
-void main() => runApp(const MyApp());
+// Import Views
+import 'views/onboarding/height_picker_screen.dart';
+// Import ViewModels
+import 'viewmodels/onboarding/height_picker_viewmodel.dart';
+// Import Models (untuk inisialisasi awal UserProfile)
+import 'models/user_profile.dart';
+
+
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,8 +28,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Health Tracker App',
-      theme: ThemeData(primarySwatch: Colors.teal),
-      home: LoginScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      // Provider akan disediakan di sini atau di root widget masing-masing
+      home: MultiProvider(
+        providers: [
+          // Untuk layar pertama (HeightPickerScreen), kita sediakan ViewModel-nya
+          // dan sebuah UserProfile kosong sebagai awal
+          ChangeNotifierProvider(
+            create: (_) => HeightPickerViewModel(),
+          ),
+          // Anda mungkin ingin menyediakan UserProfile di level yang lebih tinggi
+          // jika ini adalah data yang akan mengalir di seluruh onboarding.
+          // Untuk demo ini, UserProfile diteruskan antar layar.
+        ],
+        child: HeightPickerScreen(userProfile: UserProfile()), // Mulai dengan UserProfile kosong
+      ),
     );
   }
 }
