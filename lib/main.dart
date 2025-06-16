@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'dart:async';
+// Import screen lain
+
+import 'firebase_options.dart'; // ⬅️ Tambahkan ini
+import 'screen/login_screen.dart';
 
 // Import Views
 import 'views/onboarding/height_picker_screen.dart';
