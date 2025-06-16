@@ -3,16 +3,18 @@ import 'package:firebase_core/firebase_core.dart';
 import '../services/firebase/firebase_options.dart';
 import 'dart:async';
 
-import 'views/login_screen.dart'; // pastikan path ini sesuai
+// Login & Onboarding screens
+import 'views/login_screen.dart';
+import 'views/onboarding1.dart';
+import 'views/onboarding2.dart';
+import 'views/onboarding3.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // ✅ Inisialisasi Firebase dengan konfigurasi platform saat ini
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
@@ -25,7 +27,17 @@ class MyApp extends StatelessWidget {
       title: 'Health Tracker App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.teal),
+
+      // Tampilkan SplashScreen pertama kali
       home: const SplashScreen(),
+
+      // Named routes untuk Login & Onboarding
+      routes: {
+        '/login': (_) => const LoginScreen(),
+        '/onboarding1': (_) => const Onboarding1Page(),
+        '/onboarding2': (_) => const Onboarding2Page(),
+        '/onboarding3': (_) => const Onboarding3Page(),
+      },
     );
   }
 }
@@ -43,10 +55,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      // Setelah splash delay, pindah ke LoginScreen via named route
+      Navigator.pushReplacementNamed(context, '/login');
     });
   }
 
