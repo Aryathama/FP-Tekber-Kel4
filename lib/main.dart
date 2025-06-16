@@ -1,21 +1,33 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import '../services/firebase/firebase_options.dart';
-import 'dart:async';
+// lib/main.dart
 
-// Login & Onboarding screens
-import 'views/login_screen.dart';
-import 'views/onboarding1.dart';
-import 'views/onboarding2.dart';
-import 'views/onboarding3.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';                 
+import 'package:firebase_core/firebase_core.dart';        
+import 'services/firebase/firebase_options.dart';
+import 'dart:async';                                      
+
+// ViewModels
+import 'viewmodels/home_viewmodel.dart';              
+
+// Views
+import 'views/login_screen.dart';                       
+import 'views/onboarding1.dart';                        
+import 'views/onboarding2.dart';                        
+import 'views/onboarding3.dart';                        
+import 'views/home_page.dart';                          
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // ✅ Inisialisasi Firebase dengan konfigurasi platform saat ini
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => HomeViewModel(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,25 +36,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Health Tracker App',
+      title: 'Nutricore Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        fontFamily: 'Poppins',
+      ),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.teal),
 
-      // Tampilkan SplashScreen pertama kali
       home: const SplashScreen(),
 
-      // Named routes untuk Login & Onboarding
       routes: {
         '/login': (_) => const LoginScreen(),
         '/onboarding1': (_) => const Onboarding1Page(),
         '/onboarding2': (_) => const Onboarding2Page(),
         '/onboarding3': (_) => const Onboarding3Page(),
+        '/home': (_) => const HomePage(),
       },
     );
   }
 }
 
-// SplashScreen dengan background putih & logo di tengah
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -55,7 +68,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 2), () {
-      // Setelah splash delay, pindah ke LoginScreen via named route
       Navigator.pushReplacementNamed(context, '/login');
     });
   }
