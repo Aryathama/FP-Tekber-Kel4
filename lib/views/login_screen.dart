@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/firebase/auth_service.dart';
 import 'register_screen.dart';
-import 'dashboard_screen.dart';
+import 'onboarding1.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back button
+              // Tombol kembali
               IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
@@ -111,7 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const Onboarding1Page(),
+                        ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -134,13 +136,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => RegisterScreen()),
+                        MaterialPageRoute(builder: (_) => const RegisterScreen()),
                       );
                     },
                     child: const Text('Register'),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
