@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 // import 'package:onboarding_app/views/home_page.dart';
 
 class BMIDetailScreen extends StatelessWidget {
+  const BMIDetailScreen({super.key});
+
   // BMI Detail Screen tidak lagi menerima data langsung di konstruktor,
   // melainkan mengambil dari ViewModel yang disediakan oleh Provider.
 

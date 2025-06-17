@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class GenderPickerScreen extends StatelessWidget {
   final UserProfile userProfile; // Menerima UserProfile dari layar sebelumnya
 
-  GenderPickerScreen({required this.userProfile});
+  const GenderPickerScreen({super.key, required this.userProfile});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class GenderPickerScreen extends StatelessWidget {
                               weight: 62, // Ganti dengan input asli dari layar Weight
                             );
 
-                            print('Finish pressed! Final UserProfile: ${finalProfile}');
+                            print('Finish pressed! Final UserProfile: $finalProfile');
 
                             // Gunakan pushReplacement agar pengguna tidak bisa kembali ke onboarding
                             Navigator.pushReplacement(

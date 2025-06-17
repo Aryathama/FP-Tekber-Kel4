@@ -8,7 +8,7 @@ import '/views/onboarding/gender_picker_screen.dart'; // Untuk navigasi
 class HeightPickerScreen extends StatefulWidget {
   final UserProfile userProfile; // Menerima UserProfile dari layar sebelumnya
 
-  HeightPickerScreen({required this.userProfile});
+  const HeightPickerScreen({super.key, required this.userProfile});
 
   @override
   _HeightPickerScreenState createState() => _HeightPickerScreenState();
