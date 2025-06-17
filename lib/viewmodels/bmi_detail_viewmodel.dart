@@ -5,10 +5,18 @@ import '/utils/bmi_calculator_util.dart'; // Sesuaikan path
 class BMIDetailViewModel extends ChangeNotifier {
   final UserProfile _userProfile;
 
-  BMIDetailViewModel(this._userProfile) {
-    // Pastikan data yang diperlukan ada
+  BMIDetailViewModel(this._userProfile) { // Menerima UserProfile di sini
+    // Pastikan data yang diperlukan ada saat ViewModel dibuat
     if (_userProfile.weight == null || _userProfile.height == null) {
+      // Ini akan memicu error jika weight/height masih null
       throw ArgumentError('Weight and Height must be provided for BMI calculation.');
+    }
+    // Tambahkan cek untuk age dan gender jika mereka juga diperlukan
+    if (_userProfile.age == null) {
+      print('Warning: Age is null in BMIDetailViewModel');
+    }
+    if (_userProfile.gender == null) {
+      print('Warning: Gender is null in BMIDetailViewModel');
     }
   }
 
