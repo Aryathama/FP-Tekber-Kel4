@@ -342,26 +342,45 @@ class HomePage extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: InfoCard(
-            value:
-                '${summary.waterConsumedLiters.toStringAsFixed(1)}/${summary.waterGoalLiters.toStringAsFixed(1)}',
-            unit: 'litres',
-            message: "You're doing good,\nKeep it up!",
-            primaryColor: const Color(0xFFA2C9FA),
-            secondaryColor: const Color(0xFF628FD9),
-            onTap: () => _showAddWaterDialog(context, viewModel),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: LinearProgressIndicator(
-                value: (summary.waterGoalLiters > 0)
-                    ? (summary.waterConsumedLiters / summary.waterGoalLiters)
-                        .clamp(0.0, 1.0)
-                    : 0.0,
-                minHeight: 8,
-                backgroundColor: const Color(0xFFA2C9FA),
-                valueColor:
-                    const AlwaysStoppedAnimation<Color>(Color(0xFF628FD9)),
-              ),
+          child: SizedBox(
+            height: 180,
+            child: Stack(
+              children: [
+                // Background utama (biru muda)
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFFA2C9FA),
+                  ),
+                ),
+                // Overlay secondaryColor sesuai progress air (dari bawah ke atas)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: FractionallySizedBox(
+                    widthFactor: 1.0,
+                    heightFactor: (summary.waterGoalLiters > 0)
+                        ? (summary.waterConsumedLiters / summary.waterGoalLiters).clamp(0.0, 1.0)
+                        : 0.0,
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xFF628FD9),
+                      ),
+                    ),
+                  ),
+                ),
+                // Konten InfoCard transparan agar text tetap terlihat
+                InfoCard(
+                  value: '${summary.waterConsumedLiters.toStringAsFixed(1)}/${summary.waterGoalLiters.toStringAsFixed(1)}',
+                  unit: 'litres',
+                  message: "You're doing good,\nKeep it up!",
+                  primaryColor: Colors.transparent,
+                  secondaryColor: Colors.transparent,
+                  onTap: () => _showAddWaterDialog(context, viewModel),
+                  child: null,
+                ),
+              ],
             ),
           ),
         ),
