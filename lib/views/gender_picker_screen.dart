@@ -66,14 +66,7 @@ class GenderPickerScreen extends StatelessWidget {
                     onPressed: viewModel.canProceed
                         ? () {
                             // Update userProfile dengan gender yang dipilih
-                            final updatedProfile = userProfile.copyWith(gender: viewModel.selectedGender);
-
-                            // Tambahkan data dummy age dan weight jika belum ada dari layar sebelumnya
-                            // Di aplikasi nyata, ini akan datang dari layar input Age dan Weight
-                            final finalProfile = updatedProfile.copyWith(
-                              age: 19,    // Ganti dengan input asli dari layar Age
-                              weight: 62, // Ganti dengan input asli dari layar Weight
-                            );
+                            final finalProfile = userProfile.copyWith(gender: viewModel.selectedGender);
 
                             print('Finish pressed! Final UserProfile: ${finalProfile}');
 

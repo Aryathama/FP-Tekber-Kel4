@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart'; // Import provider
+import '/models/user_profile.dart'; // Ganti 'your_app_name'
+import '/views/onboarding2.dart'; // Ganti 'your_app_name'
+import '/viewmodels/age_picker_viewmodel.dart'; // Ganti 'your_app_name'
 
 class Onboarding1Page extends StatelessWidget {
   const Onboarding1Page({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // warna hijau yang dipakai untuk highlight & tombol
     final highlight = Colors.green[600]!;
 
     return Scaffold(
@@ -16,16 +19,14 @@ class Onboarding1Page extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
 
-            // Logo
             SvgPicture.asset(
               'assets/logowithtext.svg',
               width: 100,
               height: 32,
             ),
 
-            const Spacer(), // pushes illustration downward
+            const Spacer(),
 
-            // Ilustrasi bowl + buah
             SvgPicture.asset(
               'assets/1072730OMUNMK1.svg',
               width: 350,
@@ -33,10 +34,8 @@ class Onboarding1Page extends StatelessWidget {
               fit: BoxFit.contain,
             ),
 
-            // !-- tighten the gap here --!
             const SizedBox(height: 24),
 
-            // Judul 2 baris dengan highlight
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
@@ -82,7 +81,6 @@ class Onboarding1Page extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // Subjudul
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 32),
               child: Text(
@@ -95,7 +93,7 @@ class Onboarding1Page extends StatelessWidget {
               ),
             ),
 
-            const Spacer(), // pushes button to bottom
+            const Spacer(),
 
             // Tombol Next
             Padding(
@@ -104,7 +102,18 @@ class Onboarding1Page extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/onboarding2'),
+                  onPressed: () {
+                    // !!! PERUBAHAN UTAMA DI SINI !!!
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (context) => AgePickerViewModel(), // Sediakan AgePickerViewModel
+                          child: Onboarding2Page(userProfile: UserProfile()), // Mulai UserProfile kosong
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: highlight,
                     shape: RoundedRectangleBorder(
