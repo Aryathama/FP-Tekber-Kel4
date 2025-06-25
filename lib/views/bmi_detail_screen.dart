@@ -122,37 +122,45 @@ class BMIDetailScreen extends StatelessWidget {
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: ElevatedButton(
-                      // --- INI ADALAH BAGIAN YANG DIPERBAIKI ---
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              // Bungkus halaman tujuan dengan ChangeNotifierProvider di sini
-                              return ChangeNotifierProvider(
-                                create: (context) => HomeViewModel(), // Buat instance ViewModel baru
-                                child: const HomePage(), // Halaman tujuan Anda
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: 350,
+                          child: ElevatedButton(
+                            // --- INI ADALAH BAGIAN YANG DIPERBAIKI ---
+                            onPressed: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    // Bungkus halaman tujuan dengan ChangeNotifierProvider di sini
+                                    return ChangeNotifierProvider(
+                                      create: (context) => HomeViewModel(), // Buat instance ViewModel baru
+                                      child: const HomePage(), // Halaman tujuan Anda
+                                    );
+                                  },
+                                ),
+                                (Route<dynamic> route) => false, // Hapus semua halaman sebelumnya
                               );
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[600],
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(double.infinity, 55),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'Go to Homepage →',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          (Route<dynamic> route) => false, // Hapus semua halaman sebelumnya
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[600],
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 55),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Go to Homepage →',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      ],
                     ),
                   ),
                 ],
