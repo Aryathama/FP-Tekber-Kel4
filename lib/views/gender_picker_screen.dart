@@ -62,38 +62,42 @@ class GenderPickerScreen extends StatelessWidget {
 
                   Spacer(),
 
-                  ElevatedButton(
-                    onPressed: viewModel.canProceed
-                        ? () {
-                            // Update userProfile dengan gender yang dipilih
-                            final finalProfile = userProfile.copyWith(gender: viewModel.selectedGender);
+                  SizedBox(
+                    height: 50,
+                    width: 350,
+                    child: ElevatedButton(
+                      onPressed: viewModel.canProceed
+                          ? () {
+                              // Update userProfile dengan gender yang dipilih
+                              final finalProfile = userProfile.copyWith(gender: viewModel.selectedGender);
 
-                            print('Finish pressed! Final UserProfile: ${finalProfile}');
+                              print('Finish pressed! Final UserProfile: ${finalProfile}');
 
-                            // Gunakan pushReplacement agar pengguna tidak bisa kembali ke onboarding
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChangeNotifierProvider(
-                                  create: (_) => BMIDetailViewModel(finalProfile),
-                                  child: BMIDetailScreen(),
+                              // Gunakan pushReplacement agar pengguna tidak bisa kembali ke onboarding
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChangeNotifierProvider(
+                                    create: (_) => BMIDetailViewModel(finalProfile),
+                                    child: BMIDetailScreen(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[600],
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                              );
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[600],
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'Finish →',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      child: Text(
+                        'Finish →',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   SizedBox(height: 16),

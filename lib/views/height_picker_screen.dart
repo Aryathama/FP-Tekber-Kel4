@@ -140,35 +140,39 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
                 padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // ... (kode onPressed tetap sama) ...
-                        final updatedProfile = widget.userProfile.copyWith(height: viewModel.currentHeightCm.round());
-                        print('Next pressed! Height: ${updatedProfile.height} cm');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChangeNotifierProvider(
-                              create: (_) => GenderPickerViewModel(),
-                              child: GenderPickerScreen(userProfile: updatedProfile), // Teruskan UserProfile
+                    SizedBox(
+                      width: 350,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // ... (kode onPressed tetap sama) ...
+                          final updatedProfile = widget.userProfile.copyWith(height: viewModel.currentHeightCm.round());
+                          print('Next pressed! Height: ${updatedProfile.height} cm');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChangeNotifierProvider(
+                                create: (_) => GenderPickerViewModel(),
+                                child: GenderPickerScreen(userProfile: updatedProfile), // Teruskan UserProfile
+                              ),
                             ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFD9F99D),
+                          foregroundColor: Colors.black,
+                          minimumSize: Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow[400],
-                        foregroundColor: Colors.black,
-                        minimumSize: Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          'Next →',
+                          style: TextStyle(fontSize: 18),
                         ),
                       ),
-                      child: Text(
-                        'Next →',
-                        style: TextStyle(fontSize: 18),
-                      ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 8),
                     TextButton(
                       onPressed: () {
                         print('Back pressed from HeightPickerScreen!');
@@ -179,6 +183,7 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
                         style: TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),

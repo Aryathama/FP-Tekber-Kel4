@@ -118,31 +118,39 @@ class BMIDetailScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        print('Go to Homepage pressed!');
-                        // Anda bisa menavigasi ke HomePage di sini.
-                        // Contoh:
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => Text('Welcome to Homepage!')), // Ganti dengan HomePage() Anda
-                          (Route<dynamic> route) => false, // Hapus semua route sebelumnya
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[600],
-                        foregroundColor: Colors.white,
-                        minimumSize: Size(double.infinity, 55),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: 350,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print('Go to Homepage pressed!');
+                              // Anda bisa menavigasi ke HomePage di sini.
+                              // Contoh:
+                              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Text('Welcome to Homepage!')), // Ganti dengan HomePage() Anda
+                                (Route<dynamic> route) => false, // Hapus semua route sebelumnya
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[600],
+                              foregroundColor: Colors.white,
+                              minimumSize: Size(double.infinity, 55),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Go to Homepage →',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        'Go to Homepage →',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      ],
                     ),
                   ),
                 ],
