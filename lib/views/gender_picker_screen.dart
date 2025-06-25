@@ -65,35 +65,38 @@ class GenderPickerScreen extends StatelessWidget {
                   ),
                   
                   const Spacer(),
-                  
-                  ElevatedButton(
-                    onPressed: viewModel.canProceed
-                        ? () {
-                            final updatedProfile = userProfile.copyWith(gender: viewModel.selectedGender);
+                  SizedBox(
+                    height: 50,
+                    width: 350,
+                    child: ElevatedButton(
+                      onPressed: viewModel.canProceed
+                          ? () {
+                              final updatedProfile = userProfile.copyWith(gender: viewModel.selectedGender);
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChangeNotifierProvider(
-                                  create: (_) => BMIDetailViewModel(updatedProfile),
-                                  child: const BMIDetailScreen(),
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChangeNotifierProvider(
+                                    create: (_) => BMIDetailViewModel(updatedProfile),
+                                    child: const BMIDetailScreen(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[600],
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                              );
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[600],
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Finish →',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      child: const Text(
+                        'Finish →',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -151,15 +154,15 @@ class GenderPickerScreen extends StatelessWidget {
         child: Row(
           children: [
             ClipOval(
-              child: SizedBox(
-                width: 50,  // Diameter lingkaran (radius 25 * 2)
-                height: 50, // Diameter lingkaran
-                child: SvgPicture.asset(
-                  iconPath,
-                  fit: BoxFit.cover, // Perintahkan SVG untuk mengisi penuh area
-                ),
+            child: SizedBox(
+              width: 50,  // Diameter lingkaran (radius 25 * 2)
+              height: 50, // Diameter lingkaran
+              child: SvgPicture.asset(
+                iconPath,
+                fit: BoxFit.cover, // Perintahkan SVG untuk mengisi penuh area
               ),
             ),
+          ),
             const SizedBox(width: 20),
             Expanded(
               child: Text(
