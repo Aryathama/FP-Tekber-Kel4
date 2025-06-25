@@ -110,82 +110,85 @@ class _HeightPickerScreenState extends State<HeightPickerScreen> with SingleTick
                 ),
                 SizedBox(height: 40),
                 Expanded(
-                  child: GestureDetector(
-                    onHorizontalDragUpdate: (details) => _handleHorizontalDragUpdate(details, viewModel),
-                    onHorizontalDragEnd: (details) => _handleHorizontalDragEnd(details, viewModel),
-                    child: CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 100.0),
-                      painter: RulerPainter(
-                        minHeight: viewModel.minHeightCm,
-                        maxHeight: viewModel.maxHeightCm,
-                        pixelsPerCm: viewModel.pixelsPerCm,
-                        scrollOffset: viewModel.scrollOffset,
+                child: Stack(
+                  alignment: Alignment.center, // Pusatkan children di dalam Stack
+                  children: [
+                    GestureDetector(
+                      onHorizontalDragUpdate: (details) => _handleHorizontalDragUpdate(details, viewModel),
+                      onHorizontalDragEnd: (details) => _handleHorizontalDragEnd(details, viewModel),
+                      child: CustomPaint(
+                        size: Size(MediaQuery.of(context).size.width, 100.0), // Tinggi yang sama
+                        painter: RulerPainter(
+                          minHeight: viewModel.minHeightCm,
+                          maxHeight: viewModel.maxHeightCm,
+                          pixelsPerCm: viewModel.pixelsPerCm,
+                          scrollOffset: viewModel.scrollOffset,
+                        ),
                       ),
                     ),
-                  ),
+                    // Pointer merah, sekarang diposisikan di tengah Stack
+                    Container(
+                      width: 3,
+                      height: 120.0, // Sesuaikan tinggi agar lebih panjang dari ruler
+                      color: Colors.redAccent,
+                    ),
+                  ],
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 3,
-                    height: 100.0 + 20,
-                    color: Colors.redAccent,
-                  ),
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Update userProfile dengan tinggi yang dipilih
-                          final updatedProfile = widget.userProfile.copyWith(height: viewModel.currentHeightCm.round());
-                          print('Next pressed! Height: ${updatedProfile.height} cm');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChangeNotifierProvider(
-                                create: (_) => GenderPickerViewModel(),
-                                child: GenderPickerScreen(userProfile: updatedProfile), // Teruskan UserProfile
-                              ),
+              ),
+              Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // ... (kode onPressed tetap sama) ...
+                        final updatedProfile = widget.userProfile.copyWith(height: viewModel.currentHeightCm.round());
+                        print('Next pressed! Height: ${updatedProfile.height} cm');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangeNotifierProvider(
+                              create: (_) => GenderPickerViewModel(),
+                              child: GenderPickerScreen(userProfile: updatedProfile), // Teruskan UserProfile
                             ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.yellow[400],
-                          foregroundColor: Colors.black,
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ),
-                        child: Text(
-                          'Next →',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () {
-                          print('Back pressed from HeightPickerScreen!');
-                          Navigator.pop(context); // Kembali ke layar sebelumnya (jika ada, atau keluar app)
-                        },
-                        child: Text(
-                          'Back',
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow[400],
+                        foregroundColor: Colors.black,
+                        minimumSize: Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    ],
-                  ),
+                      child: Text(
+                        'Next →',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        print('Back pressed from HeightPickerScreen!');
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Back',
+                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
   Widget _buildUnitButton(String text, bool isSelected, VoidCallback onPressed) {
     return SizedBox(
