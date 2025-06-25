@@ -47,4 +47,44 @@ class BMICalculatorUtil {
         return 'Unknown!';
     }
   }
+
+  // --- REVISI: Tambahkan metode ini untuk mendapatkan nilai goals ---
+  // Berdasarkan tabel di gambar
+  static Map<String, double> getNutritionGoals(String planText) {
+    switch (planText) {
+      case 'Bulking!':
+        return {
+          'calories': 2500,
+          'protein': 130,
+          'fats': 80,
+          'carbs': 350,
+          'water': 3.0,
+        };
+      case 'Maintaining!':
+        return {
+          'calories': 2000,
+          'protein': 100,
+          'fats': 65,
+          'carbs': 275,
+          'water': 2.5,
+        };
+      case 'Cutting!':
+        return {
+          'calories': 1600,
+          'protein': 130,
+          'fats': 50,
+          'carbs': 170,
+          'water': 3.0,
+        };
+      default:
+        // Nilai default jika plan tidak dikenali
+        return {
+          'calories': 2000,
+          'protein': 100,
+          'fats': 65,
+          'carbs': 275,
+          'water': 2.5,
+        };
+    }
+  }
 }
