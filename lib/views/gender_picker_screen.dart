@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import '/models/user_profile.dart'; // Sesuaikan path
-import '../viewmodels/gender_picker_viewmodel.dart'; // Sesuaikan path
-import '../viewmodels/bmi_detail_viewmodel.dart'; // Untuk navigasi
-import '/views/bmi_detail_screen.dart'; // Untuk navigasi
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // <-- LANGKAH 1: TAMBAHKAN IMPORT INI
+
+// Sesuaikan path ini dengan struktur folder Anda
+import '../../models/user_profile.dart';
+import '../viewmodels/gender_picker_viewmodel.dart';
+import '../viewmodels/bmi_detail_viewmodel.dart';
+import 'bmi_detail_screen.dart';
+
 
 class GenderPickerScreen extends StatelessWidget {
-  final UserProfile userProfile; // Menerima UserProfile dari layar sebelumnya
+  final UserProfile userProfile;
 
-  GenderPickerScreen({required this.userProfile});
+  const GenderPickerScreen({super.key, required this.userProfile});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +31,8 @@ class GenderPickerScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40),
-                  Text(
+                  const SizedBox(height: 40),
+                  const Text(
                     "What's your\ngender?",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -37,22 +41,23 @@ class GenderPickerScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 60),
-
-                  // ... (kode _buildGenderOptionCard tetap sama) ...
+                  const SizedBox(height: 60),
+                  
+                  // Memanggil _buildGenderOptionCard untuk Female
                   _buildGenderOptionCard(
                     context,
-                    icon: 'assets/female_avatar.png',
+                    iconPath: 'assets/femaleavatar.svg', // Menggunakan path String
                     text: 'Female',
                     genderValue: Gender.female,
                     isSelected: viewModel.selectedGender == Gender.female,
                     onTap: () => viewModel.selectGender(Gender.female),
                   ),
-                  SizedBox(height: 20),
-
+                  const SizedBox(height: 20),
+                  
+                  // Memanggil _buildGenderOptionCard untuk Male
                   _buildGenderOptionCard(
                     context,
-                    icon: 'assets/male_avatar.png',
+                    iconPath: 'assets/maleavatar.svg', // Menggunakan path String
                     text: 'Male',
                     genderValue: Gender.male,
                     isSelected: viewModel.selectedGender == Gender.male,
@@ -62,50 +67,45 @@ class GenderPickerScreen extends StatelessWidget {
 
                   Spacer(),
 
-                  SizedBox(
-                    height: 50,
-                    width: 350,
-                    child: ElevatedButton(
-                      onPressed: viewModel.canProceed
-                          ? () {
-                              // Update userProfile dengan gender yang dipilih
-                              final finalProfile = userProfile.copyWith(gender: viewModel.selectedGender);
+                  ElevatedButton(
+                    onPressed: viewModel.canProceed
+                        ? () {
+                            // Update userProfile dengan gender yang dipilih
+                            final finalProfile = userProfile.copyWith(gender: viewModel.selectedGender);
 
-                              print('Finish pressed! Final UserProfile: ${finalProfile}');
+                            print('Finish pressed! Final UserProfile: ${finalProfile}');
 
-                              // Gunakan pushReplacement agar pengguna tidak bisa kembali ke onboarding
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChangeNotifierProvider(
-                                    create: (_) => BMIDetailViewModel(finalProfile),
-                                    child: BMIDetailScreen(),
-                                  ),
+                            // Gunakan pushReplacement agar pengguna tidak bisa kembali ke onboarding
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChangeNotifierProvider(
+                                  create: (_) => BMIDetailViewModel(finalProfile),
+                                  child: BMIDetailScreen(),
                                 ),
-                              );
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[600],
-                        foregroundColor: Colors.white,
-                        minimumSize: Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
+                              ),
+                            );
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[600],
+                      foregroundColor: Colors.white,
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        'Finish →',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'Finish →',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(height: 16),
-
+                  const SizedBox(height: 16),
+                  
                   TextButton(
                     onPressed: () {
-                      print('Back pressed from GenderPickerScreen!');
-                      Navigator.pop(context); // Kembali ke HeightPickerScreen
+                      Navigator.pop(context);
                     },
                     child: Text(
                       'Back',
@@ -124,9 +124,10 @@ class GenderPickerScreen extends StatelessWidget {
     );
   }
 
+  // --- WIDGET INI TELAH DIREVISI ---
   Widget _buildGenderOptionCard(
     BuildContext context, {
-    required String icon,
+    required String iconPath, // Parameter sekarang bernama iconPath
     required String text,
     required Gender genderValue,
     required bool isSelected,
@@ -135,7 +136,7 @@ class GenderPickerScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -148,22 +149,27 @@ class GenderPickerScreen extends StatelessWidget {
               color: Colors.black.withOpacity(0.05),
               spreadRadius: 1,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundColor: Colors.grey[200],
-              backgroundImage: AssetImage(icon),
+            ClipOval(
+            child: SizedBox(
+              width: 50,  // Diameter lingkaran (radius 25 * 2)
+              height: 50, // Diameter lingkaran
+              child: SvgPicture.asset(
+                iconPath,
+                fit: BoxFit.cover, // Perintahkan SVG untuk mengisi penuh area
+              ),
             ),
-            SizedBox(width: 20),
+          ),
+            const SizedBox(width: 20),
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,
@@ -182,7 +188,7 @@ class GenderPickerScreen extends StatelessWidget {
                 color: isSelected ? Colors.redAccent : Colors.transparent,
               ),
               child: isSelected
-                  ? Icon(Icons.circle, size: 12, color: Colors.white)
+                  ? const Icon(Icons.circle, size: 12, color: Colors.white)
                   : null,
             ),
           ],
