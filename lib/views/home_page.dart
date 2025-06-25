@@ -341,46 +341,44 @@ class HomePage extends StatelessWidget {
       BuildContext context, HomeViewModel viewModel, NutritionSummary summary) {
     return Row(
       children: [
+        // ...existing code...
         Expanded(
           child: SizedBox(
             height: 180,
-            child: Stack(
-              children: [
-                // Background utama (biru muda)
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Stack(
+                children: [
+                  // Background utama (biru muda)
+                  Container(
                     color: const Color(0xFFA2C9FA),
                   ),
-                ),
-                // Overlay secondaryColor sesuai progress air (dari bawah ke atas)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FractionallySizedBox(
-                    widthFactor: 1.0,
-                    heightFactor: (summary.waterGoalLiters > 0)
-                        ? (summary.waterConsumedLiters / summary.waterGoalLiters).clamp(0.0, 1.0)
-                        : 0.0,
+                  // Overlay secondaryColor sesuai progress air (dari bawah ke atas)
+                  Align(
                     alignment: Alignment.bottomCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                    child: FractionallySizedBox(
+                      widthFactor: 1.0,
+                      heightFactor: (summary.waterGoalLiters > 0)
+                          ? (summary.waterConsumedLiters / summary.waterGoalLiters).clamp(0.0, 1.0)
+                          : 0.0,
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
                         color: const Color(0xFF628FD9),
                       ),
                     ),
                   ),
-                ),
-                // Konten InfoCard transparan agar text tetap terlihat
-                InfoCard(
-                  value: '${summary.waterConsumedLiters.toStringAsFixed(1)}/${summary.waterGoalLiters.toStringAsFixed(1)}',
-                  unit: 'litres',
-                  message: "You're doing good,\nKeep it up!",
-                  primaryColor: Colors.transparent,
-                  secondaryColor: Colors.transparent,
-                  onTap: () => _showAddWaterDialog(context, viewModel),
-                  child: null,
-                ),
-              ],
+                  // Konten InfoCard transparan agar text tetap terlihat
+                  InfoCard(
+                    value: '${summary.waterConsumedLiters.toStringAsFixed(1)}/${summary.waterGoalLiters.toStringAsFixed(1)}',
+                    unit: 'litres',
+                    message: "You're doing good,\nKeep it up!",
+                    primaryColor: Colors.transparent,
+                    secondaryColor: Colors.transparent,
+                    onTap: () => _showAddWaterDialog(context, viewModel),
+                    child: null,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
