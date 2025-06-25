@@ -9,6 +9,7 @@ class InfoCard extends StatelessWidget {
   final Color primaryColor;
   final Color secondaryColor;
   final VoidCallback? onTap;
+  final Widget? child;
 
   const InfoCard({
     super.key,
@@ -18,6 +19,7 @@ class InfoCard extends StatelessWidget {
     required this.primaryColor,
     required this.secondaryColor,
     this.onTap,
+    this.child
   });
 
   @override

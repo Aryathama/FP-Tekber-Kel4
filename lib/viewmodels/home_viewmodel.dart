@@ -1,14 +1,13 @@
-// lib/viewmodels/home_viewmodel.dart
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:health_tracker_app/utils/bmi_calculator_util.dart';
-import 'package:health_tracker_app/viewmodels/bmi_detail_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
+
+import '../utils/bmi_calculator_util.dart';
 import '../models/user_model.dart';
 import '../models/nutrition_summary_model.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  // --- PROPERTIES (STATE) ---
+  // --- STATE ---
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
 
@@ -26,34 +25,32 @@ class HomeViewModel extends ChangeNotifier {
 
   // --- CONSTRUCTOR ---
   HomeViewModel() {
-    // Memuat data saat ViewModel pertama kali dibuat
     loadData();
   }
 
-  // --- LOGIC (METHODS) ---
-
-  // Simulasi memuat data dari service.
-  // REVISI: Buat data default yang lebih masuk akal.
+  // --- LOAD DATA UTAMA (user + nutrition) ---
   Future<void> loadData() async {
     _isLoading = true;
     notifyListeners();
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Ambil data user dari Firebase
+    final fbUser = fb.FirebaseAuth.instance.currentUser;
 
     _user = User(
-      name: 'Gregorius Akbar',
-      imageUrl: 'https://i.pravatar.cc/150?u=gregorius',
+      name: fbUser?.displayName ?? 'User',
+      imageUrl: fbUser?.photoURL ??
+          'https://ui-avatars.com/api/?name=${fbUser?.displayName ?? 'U'}',
     );
 
-    // REVISI: Inisialisasi dengan nilai default/kosong yang akan di-update.
-    // Atau, Anda bisa memuat dari SharedPreferences jika sudah pernah di-set.
-    // Ambil planText dari SharedPreferences (default: 'Maintaining!')
+    // Ambil plan dan goals dari SharedPreferences + util
     final prefs = await SharedPreferences.getInstance();
     final planText = prefs.getString('planText') ?? 'Maintaining!';
     final goals = BMICalculatorUtil.getNutritionGoals(planText);
 
     _nutritionSummary = NutritionSummary(
-      currentPlan: planText, // Ambil plan dari BMIDetailViewModel
+      currentPlan: planText,
       caloriesConsumed: 0,
       caloriesGoal: goals['calories'] ?? 0,
       proteinConsumed: 0,
@@ -70,8 +67,8 @@ class HomeViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-  
-  // --- REVISI: Metode baru untuk update goals dari BMI Detail Screen ---
+
+  // --- UPDATE GOALS (dari hasil test BMI) ---
   void updateNutritionGoals({
     required String currentPlan,
     required double caloriesGoal,
@@ -96,10 +93,11 @@ class HomeViewModel extends ChangeNotifier {
         stepsTaken: _nutritionSummary!.stepsTaken,
       );
       notifyListeners();
-      print('Goals updated from BMI screen: $currentPlan, Kalori=$caloriesGoal');
+      print('Goals updated: $currentPlan - $caloriesGoal kcal');
     }
   }
 
+  // --- NAVIGATION & UI STATE ---
   void onBottomNavTapped(int index) {
     _selectedIndex = index;
     notifyListeners();
@@ -109,29 +107,28 @@ class HomeViewModel extends ChangeNotifier {
     _hasNewNotification = false;
     notifyListeners();
   }
-  
+
+  // --- TRACKING WATER ---
   void addWater(int amountInMl) {
     if (_nutritionSummary != null) {
-      final currentWater = _nutritionSummary!.waterConsumedLiters;
-      final newWater = currentWater + (amountInMl / 1000.0);
-      
+      final newWater = _nutritionSummary!.waterConsumedLiters + (amountInMl / 1000.0);
       _nutritionSummary = NutritionSummary(
-        currentPlan: _nutritionSummary!.currentPlan, 
-        caloriesConsumed: _nutritionSummary!.caloriesConsumed, 
-        caloriesGoal: _nutritionSummary!.caloriesGoal, 
-        proteinConsumed: _nutritionSummary!.proteinConsumed, 
-        proteinGoal: _nutritionSummary!.proteinGoal, 
-        fatsConsumed: _nutritionSummary!.fatsConsumed, 
-        fatsGoal: _nutritionSummary!.fatsGoal, 
-        carbsConsumed: _nutritionSummary!.carbsConsumed, 
-        carbsGoal: _nutritionSummary!.carbsGoal, 
+        currentPlan: _nutritionSummary!.currentPlan,
+        caloriesConsumed: _nutritionSummary!.caloriesConsumed,
+        caloriesGoal: _nutritionSummary!.caloriesGoal,
+        proteinConsumed: _nutritionSummary!.proteinConsumed,
+        proteinGoal: _nutritionSummary!.proteinGoal,
+        fatsConsumed: _nutritionSummary!.fatsConsumed,
+        fatsGoal: _nutritionSummary!.fatsGoal,
+        carbsConsumed: _nutritionSummary!.carbsConsumed,
+        carbsGoal: _nutritionSummary!.carbsGoal,
         waterConsumedLiters: newWater,
-        waterGoalLiters: _nutritionSummary!.waterGoalLiters, 
-        stepsTaken: _nutritionSummary!.stepsTaken
+        waterGoalLiters: _nutritionSummary!.waterGoalLiters,
+        stepsTaken: _nutritionSummary!.stepsTaken,
       );
-      
+
       notifyListeners();
-      print('User added: $amountInMl ml. New total: $newWater L');
+      print('Water added: $amountInMl ml -> ${newWater.toStringAsFixed(1)} L');
     }
   }
 }
