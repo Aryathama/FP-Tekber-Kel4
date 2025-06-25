@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// Sesuaikan path ini dengan struktur folder Anda
 import '../viewmodels/bmi_detail_viewmodel.dart';
 import '../viewmodels/home_viewmodel.dart';
 import 'home_page.dart';
@@ -15,7 +15,6 @@ class BMIDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Menggunakan Consumer untuk mendapatkan data dari BMIDetailViewModel.
-    // Pastikan ViewModel ini sudah di-provide di alur navigasi sebelumnya.
     return Consumer<BMIDetailViewModel>(
       builder: (context, viewModel, child) {
         return Scaffold(
@@ -128,20 +127,42 @@ class BMIDetailScreen extends StatelessWidget {
                           height: 50,
                           width: 350,
                           child: ElevatedButton(
-                            // --- INI ADALAH BAGIAN YANG DIPERBAIKI ---
-                            onPressed: () {
+                            // --- REVISI: INI ADALAH BAGIAN YANG DIUBAH TOTAL ---
+                            onPressed: () async {
+                              // 1. Ambil data goals dari BMIDetailViewModel
+                              final bmiViewModel = Provider.of<BMIDetailViewModel>(context, listen: false);
+                              
+                              final double calculatedCalories = bmiViewModel.caloriesGoal;
+                              final double calculatedWater = bmiViewModel.waterGoalLiters;
+                              final double calculatedProtein = bmiViewModel.proteinGoal;
+                              final double calculatedFats = bmiViewModel.fatsGoal;
+                              final double calculatedCarbs = bmiViewModel.carbsGoal;
+                              final String currentPlanText = bmiViewModel.planText;
+
+                              // 2. Dapatkan instance HomeViewModel yang sudah ada
+                              final prefs = await SharedPreferences.getInstance();
+                              await prefs.setString('planText', currentPlanText);
+
+                              // karena sudah disediakan di main.dart
+                              final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+                              
+                              // 3. Panggil metode untuk memperbarui goals di HomeViewModel
+                              homeViewModel.updateNutritionGoals(
+                                currentPlan: currentPlanText,
+                                caloriesGoal: calculatedCalories,
+                                waterGoalLiters: calculatedWater,
+                                proteinGoal: calculatedProtein,
+                                fatsGoal: calculatedFats,
+                                carbsGoal: calculatedCarbs,
+                              );
+
+                              // 4. Navigasi ke HomePage dan hapus semua halaman sebelumnya
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) {
-                                    // Bungkus halaman tujuan dengan ChangeNotifierProvider di sini
-                                    return ChangeNotifierProvider(
-                                      create: (context) => HomeViewModel(), // Buat instance ViewModel baru
-                                      child: const HomePage(), // Halaman tujuan Anda
-                                    );
-                                  },
+                                  builder: (context) => const HomePage(), // Cukup panggil HomePage
                                 ),
-                                (Route<dynamic> route) => false, // Hapus semua halaman sebelumnya
+                                (Route<dynamic> route) => false,
                               );
                             },
                             style: ElevatedButton.styleFrom(

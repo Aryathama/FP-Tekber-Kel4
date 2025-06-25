@@ -5,13 +5,10 @@ import '/utils/bmi_calculator_util.dart'; // Sesuaikan path
 class BMIDetailViewModel extends ChangeNotifier {
   final UserProfile _userProfile;
 
-  BMIDetailViewModel(this._userProfile) { // Menerima UserProfile di sini
-    // Pastikan data yang diperlukan ada saat ViewModel dibuat
+  BMIDetailViewModel(this._userProfile) {
     if (_userProfile.weight == null || _userProfile.height == null) {
-      // Ini akan memicu error jika weight/height masih null
       throw ArgumentError('Weight and Height must be provided for BMI calculation.');
     }
-    // Tambahkan cek untuk age dan gender jika mereka juga diperlukan
     if (_userProfile.age == null) {
       print('Warning: Age is null in BMIDetailViewModel');
     }
@@ -39,6 +36,13 @@ class BMIDetailViewModel extends ChangeNotifier {
     } else if (gender == Gender.female) {
       return 'Female';
     }
-    return ''; // Or handle null case as needed
+    return '';
   }
+
+  // --- Getters dinamis untuk nilai goals berdasarkan planText ---
+  double get caloriesGoal => BMICalculatorUtil.getNutritionGoals(planText)['calories']!;
+  double get waterGoalLiters => BMICalculatorUtil.getNutritionGoals(planText)['water']!;
+  double get proteinGoal => BMICalculatorUtil.getNutritionGoals(planText)['protein']!;
+  double get fatsGoal => BMICalculatorUtil.getNutritionGoals(planText)['fats']!;
+  double get carbsGoal => BMICalculatorUtil.getNutritionGoals(planText)['carbs']!;
 }
