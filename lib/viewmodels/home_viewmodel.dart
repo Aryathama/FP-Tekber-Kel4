@@ -1,10 +1,10 @@
 // lib/viewmodels/home_viewmodel.dart
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
+
 import '../models/user_model.dart';
 import '../models/nutrition_summary_model.dart';
-// Di dunia nyata, Anda akan mengimpor Service di sini
-// import '../services/api/nutrition_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
   // --- PROPERTIES (STATE) ---
@@ -27,26 +27,23 @@ class HomeViewModel extends ChangeNotifier {
   // --- CONSTRUCTOR ---
 
   HomeViewModel() {
-    // Memuat data saat ViewModel pertama kali dibuat
     loadData();
   }
 
   // --- LOGIC (METHODS) ---
 
-  // Simulasi memuat data dari service
   Future<void> loadData() async {
     _isLoading = true;
-    notifyListeners(); // Beri tahu UI untuk menampilkan loading indicator
+    notifyListeners();
 
-    // Simulasi penundaan jaringan (network delay)
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
 
-    // Di aplikasi nyata, data ini akan datang dari service:
-    // _user = await _userService.getCurrentUser();
-    // _nutritionSummary = await _nutritionService.getTodaysSummary();
+    final fbUser = fb.FirebaseAuth.instance.currentUser;
+
     _user = User(
-      name: 'Gregorius Akbar',
-      imageUrl: 'https://i.pravatar.cc/150?u=gregorius',
+      name: fbUser?.displayName ?? 'User',
+      imageUrl: fbUser?.photoURL ??
+          'https://ui-avatars.com/api/?name=${fbUser?.displayName ?? 'U'}',
     );
 
     _nutritionSummary = NutritionSummary(
@@ -65,40 +62,40 @@ class HomeViewModel extends ChangeNotifier {
     );
 
     _isLoading = false;
-    notifyListeners(); // Beri tahu UI bahwa data sudah siap dan tampilkan
+    notifyListeners();
   }
 
   void onBottomNavTapped(int index) {
     _selectedIndex = index;
-    notifyListeners(); // Update UI untuk item navigasi yang aktif
+    notifyListeners();
   }
 
   void markNotificationAsRead() {
     _hasNewNotification = false;
-    notifyListeners(); // Update UI untuk menghilangkan badge notifikasi
+    notifyListeners();
   }
-  
+
   void addWater(int amountInMl) {
     if (_nutritionSummary != null) {
       final currentWater = _nutritionSummary!.waterConsumedLiters;
       final newWater = currentWater + (amountInMl / 1000.0);
-      
+
       _nutritionSummary = NutritionSummary(
-        currentPlan: _nutritionSummary!.currentPlan, 
-        caloriesConsumed: _nutritionSummary!.caloriesConsumed, 
-        caloriesGoal: _nutritionSummary!.caloriesGoal, 
-        proteinConsumed: _nutritionSummary!.proteinConsumed, 
-        proteinGoal: _nutritionSummary!.proteinGoal, 
-        fatsConsumed: _nutritionSummary!.fatsConsumed, 
-        fatsGoal: _nutritionSummary!.fatsGoal, 
-        carbsConsumed: _nutritionSummary!.carbsConsumed, 
-        carbsGoal: _nutritionSummary!.carbsGoal, 
-        waterConsumedLiters: newWater, // Update nilai air
-        waterGoalLiters: _nutritionSummary!.waterGoalLiters, 
-        stepsTaken: _nutritionSummary!.stepsTaken
+        currentPlan: _nutritionSummary!.currentPlan,
+        caloriesConsumed: _nutritionSummary!.caloriesConsumed,
+        caloriesGoal: _nutritionSummary!.caloriesGoal,
+        proteinConsumed: _nutritionSummary!.proteinConsumed,
+        proteinGoal: _nutritionSummary!.proteinGoal,
+        fatsConsumed: _nutritionSummary!.fatsConsumed,
+        fatsGoal: _nutritionSummary!.fatsGoal,
+        carbsConsumed: _nutritionSummary!.carbsConsumed,
+        carbsGoal: _nutritionSummary!.carbsGoal,
+        waterConsumedLiters: newWater,
+        waterGoalLiters: _nutritionSummary!.waterGoalLiters,
+        stepsTaken: _nutritionSummary!.stepsTaken,
       );
-      
-      notifyListeners(); // Update UI dengan data air yang baru
+
+      notifyListeners();
       print('User added: $amountInMl ml. New total: $newWater L');
     }
   }
