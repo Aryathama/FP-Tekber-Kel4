@@ -8,12 +8,11 @@ import '../viewmodels/notification_viewmodel.dart';
 import '../models/user_model.dart';
 import '../models/nutrition_summary_model.dart';
 
-// Impor widget kustom
+// Widget kustom
 import 'widgets/add_water_dialog.dart';
 import 'widgets/info_card.dart';
 import 'widgets/macro_nutrient_item.dart';
 
-// Asumsi Anda punya file ini
 import 'notification_page.dart';
 import 'profile_screen.dart';
 
@@ -22,7 +21,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Menggunakan Consumer untuk mendengarkan perubahan pada HomeViewModel
     return Consumer<HomeViewModel>(
       builder: (context, viewModel, child) {
         return Scaffold(
@@ -39,11 +37,9 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, HomeViewModel viewModel) {
-    // Ambil data dari ViewModel
     final user = viewModel.user;
     final summary = viewModel.nutritionSummary;
 
-    // Handle jika data null (seharusnya tidak terjadi jika isLoading false)
     if (user == null || summary == null) {
       return const Center(child: Text('Data not available.'));
     }
@@ -63,7 +59,6 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 25),
                 _buildMacroNutrients(summary),
                 const SizedBox(height: 30),
-                // ---- PERUBAHAN 1: Meneruskan context ----
                 _buildRedoTestButton(context),
                 const SizedBox(height: 20),
                 _buildInfoCards(context, viewModel, summary),
@@ -75,13 +70,11 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ---- WIDGET BUILDER METHODS ----
-
   Widget _buildFloatingActionButton() {
     return Transform.translate(
       offset: const Offset(0, 12),
       child: FloatingActionButton(
-        onPressed: () { /* Logika FAB ditambahkan di sini */ },
+        onPressed: () {},
         backgroundColor: const Color(0xFFD1E17D),
         foregroundColor: Colors.white,
         elevation: 4.0,
@@ -124,12 +117,11 @@ class HomePage extends StatelessWidget {
       child: InkWell(
         onTap: () {
           viewModel.onBottomNavTapped(index);
-
           if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ProfileScreen()),
-            );
+            ).then((_) => viewModel.loadData()); // ⬅ Refresh setelah kembali
           }
         },
         borderRadius: BorderRadius.circular(20),
@@ -165,31 +157,16 @@ class HomePage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Welcome',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300),
-              ),
-              Text(
-                user.name,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
+              const Text('Welcome',
+                  style: TextStyle(color: Colors.white, fontSize: 14)),
+              Text(user.name,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
           const Spacer(),
-          CircleAvatar(
-            backgroundColor: Colors.white.withOpacity(0.25),
-            child: IconButton(
-              icon: const Icon(Icons.search, color: Colors.white),
-              onPressed: () {},
-            ),
-          ),
-          const SizedBox(width: 10),
           CircleAvatar(
             backgroundColor: Colors.white.withOpacity(0.25),
             child: IconButton(
@@ -209,8 +186,8 @@ class HomePage extends StatelessWidget {
                           border: Border.all(
                               color: const Color(0xFF4CAF50), width: 2),
                         ),
-                        constraints:
-                            const BoxConstraints(minWidth: 12, minHeight: 12),
+                        constraints: const BoxConstraints(
+                            minWidth: 12, minHeight: 12),
                       ),
                     ),
                 ],
@@ -238,17 +215,14 @@ class HomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          'Current Plan: ',
-          style: TextStyle(fontSize: 18, color: Colors.black87),
-        ),
+        const Text('Current Plan: ',
+            style: TextStyle(fontSize: 18, color: Colors.black87)),
         Text(
           summary.currentPlan,
           style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF4CAF50),
-          ),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF4CAF50)),
         ),
       ],
     );
@@ -271,8 +245,7 @@ class HomePage extends StatelessWidget {
             children: const [
               TextSpan(
                 text: ' Kcal',
-                style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                style: TextStyle(fontSize: 20),
               ),
             ],
           ),
@@ -299,13 +272,12 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: (constraints.maxWidth * progress).clamp(0, constraints.maxWidth) - 12,
+                  left: (constraints.maxWidth * progress)
+                          .clamp(0, constraints.maxWidth) -
+                      12,
                   top: -10,
-                  child: const Icon(
-                    Icons.arrow_drop_down,
-                    color: Color(0xFF4CAF50),
-                    size: 24,
-                  ),
+                  child: const Icon(Icons.arrow_drop_down,
+                      color: Color(0xFF4CAF50), size: 24),
                 ),
               ],
             );
@@ -320,33 +292,32 @@ class HomePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         MacroNutrientItem(
-            name: 'Protein',
-            value:
-                '${summary.proteinConsumed.toInt()}g / ${summary.proteinGoal.toInt()}g',
-            color: Colors.blue),
+          name: 'Protein',
+          value:
+              '${summary.proteinConsumed.toInt()}g / ${summary.proteinGoal.toInt()}g',
+          color: Colors.blue,
+        ),
         MacroNutrientItem(
-            name: 'Fats',
-            value:
-                '${summary.fatsConsumed.toInt()}g / ${summary.fatsGoal.toInt()}g',
-            color: Colors.orange),
+          name: 'Fats',
+          value:
+              '${summary.fatsConsumed.toInt()}g / ${summary.fatsGoal.toInt()}g',
+          color: Colors.orange,
+        ),
         MacroNutrientItem(
-            name: 'Carbs',
-            value:
-                '${summary.carbsConsumed.toInt()}g / ${summary.carbsGoal.toInt()}g',
-            color: Colors.yellow),
+          name: 'Carbs',
+          value:
+              '${summary.carbsConsumed.toInt()}g / ${summary.carbsGoal.toInt()}g',
+          color: Colors.yellow,
+        ),
       ],
     );
   }
 
-  // ---- PERUBAHAN 2: Metode ini sekarang menerima context dan memiliki logika navigasi ----
   Widget _buildRedoTestButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          // Navigasi ke halaman onboarding 2 menggunakan rute bernama
-          Navigator.pushNamed(context, '/onboarding2');
-        },
+        onPressed: () => Navigator.pushNamed(context, '/onboarding2'),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFCB5E59),
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -357,10 +328,7 @@ class HomePage extends StatelessWidget {
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Redo Test',
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
+            Text('Redo Test', style: TextStyle(fontSize: 16, color: Colors.white)),
             SizedBox(width: 8),
             Icon(Icons.arrow_forward, color: Colors.white, size: 20),
           ],
@@ -382,6 +350,19 @@ class HomePage extends StatelessWidget {
             primaryColor: const Color(0xFFA2C9FA),
             secondaryColor: const Color(0xFF628FD9),
             onTap: () => _showAddWaterDialog(context, viewModel),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: LinearProgressIndicator(
+                value: (summary.waterGoalLiters > 0)
+                    ? (summary.waterConsumedLiters / summary.waterGoalLiters)
+                        .clamp(0.0, 1.0)
+                    : 0.0,
+                minHeight: 8,
+                backgroundColor: const Color(0xFFA2C9FA),
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(Color(0xFF628FD9)),
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 15),
@@ -404,10 +385,7 @@ class HomePage extends StatelessWidget {
       barrierColor: Colors.black.withOpacity(0.3),
       builder: (BuildContext context) {
         return AddWaterDialog(
-          onAdd: (amount) {
-            // Memanggil method di ViewModel
-            viewModel.addWater(amount);
-          },
+          onAdd: (amount) => viewModel.addWater(amount),
         );
       },
     );
