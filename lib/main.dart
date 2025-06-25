@@ -8,11 +8,17 @@ import 'dart:async';
 
 // ViewModels
 import 'viewmodels/home_viewmodel.dart'; // Pastikan path benar
+import 'viewmodels/age_picker_viewmodel.dart'; // Pastikan path ini benar
+
+// Models
+import '/models/user_profile.dart'; // Ganti 'your_app_name'
 
 // Views
 import 'views/login_screen.dart'; // Pastikan path benar
-
 import 'views/home_page.dart'; // Pastikan path benar
+import 'views/onboarding1.dart';
+import 'views/onboarding2.dart';
+import 'views/onboarding3.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +52,15 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (_) => const LoginScreen(),
         '/home': (_) => const HomePage(),
+        '/onboarding1': (_) => const Onboarding1Page(),
+        '/onboarding2': (_) => ChangeNotifierProvider(
+
+          create: (context) => AgePickerViewModel(), // Gunakan nama class yang benar
+
+          child: Onboarding2Page(userProfile: UserProfile()),
+
+          ),
+        '/onboarding3': (_) => Onboarding3Page(userProfile: UserProfile()),
       },
     );
   }

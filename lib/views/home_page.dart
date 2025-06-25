@@ -15,6 +15,7 @@ import 'widgets/macro_nutrient_item.dart';
 
 // Asumsi Anda punya file ini
 import 'notification_page.dart';
+import 'profile_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -62,7 +63,8 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 25),
                 _buildMacroNutrients(summary),
                 const SizedBox(height: 30),
-                _buildRedoTestButton(),
+                // ---- PERUBAHAN 1: Meneruskan context ----
+                _buildRedoTestButton(context),
                 const SizedBox(height: 20),
                 _buildInfoCards(context, viewModel, summary),
               ],
@@ -74,7 +76,6 @@ class HomePage extends StatelessWidget {
   }
 
   // ---- WIDGET BUILDER METHODS ----
-  // Semua metode ini sekarang bersifat 'pure', hanya menerima data dan me-return Widget.
 
   Widget _buildFloatingActionButton() {
     return Transform.translate(
@@ -105,9 +106,9 @@ class HomePage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildBottomNavItem(viewModel, Icons.home, 0),
+              _buildBottomNavItem(context, viewModel, Icons.home, 0),
               const SizedBox(width: 40),
-              _buildBottomNavItem(viewModel, Icons.person, 1),
+              _buildBottomNavItem(context, viewModel, Icons.person, 1),
             ],
           ),
         ),
@@ -115,11 +116,22 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavItem(HomeViewModel viewModel, IconData icon, int index) {
+  Widget _buildBottomNavItem(
+      BuildContext context, HomeViewModel viewModel, IconData icon, int index) {
     final isSelected = viewModel.selectedIndex == index;
+
     return Expanded(
       child: InkWell(
-        onTap: () => viewModel.onBottomNavTapped(index),
+        onTap: () {
+          viewModel.onBottomNavTapped(index);
+
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen()),
+            );
+          }
+        },
         borderRadius: BorderRadius.circular(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -156,12 +168,16 @@ class HomePage extends StatelessWidget {
               const Text(
                 'Welcome',
                 style: TextStyle(
-                    color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300),
               ),
               Text(
                 user.name,
                 style: const TextStyle(
-                    color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -190,9 +206,11 @@ class HomePage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
-                          border: Border.all(color: const Color(0xFF4CAF50), width: 2),
+                          border: Border.all(
+                              color: const Color(0xFF4CAF50), width: 2),
                         ),
-                        constraints: const BoxConstraints(minWidth: 12, minHeight: 12),
+                        constraints:
+                            const BoxConstraints(minWidth: 12, minHeight: 12),
                       ),
                     ),
                 ],
@@ -237,7 +255,9 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildCalorieTracker(NutritionSummary summary) {
-    double progress = summary.caloriesConsumed / summary.caloriesGoal;
+    double progress = summary.caloriesGoal > 0
+        ? summary.caloriesConsumed / summary.caloriesGoal
+        : 0;
 
     return Column(
       children: [
@@ -251,8 +271,8 @@ class HomePage extends StatelessWidget {
             children: const [
               TextSpan(
                 text: ' Kcal',
-                style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.normal),
+                style:
+                    TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
               ),
             ],
           ),
@@ -274,12 +294,12 @@ class HomePage extends StatelessWidget {
                     value: progress,
                     minHeight: 20,
                     backgroundColor: const Color(0xFF628FD9),
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Color(0xFF32619D)),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        Color(0xFF32619D)),
                   ),
                 ),
                 Positioned(
-                  left: (constraints.maxWidth * progress) - 12,
+                  left: (constraints.maxWidth * progress).clamp(0, constraints.maxWidth) - 12,
                   top: -10,
                   child: const Icon(
                     Icons.arrow_drop_down,
@@ -301,25 +321,32 @@ class HomePage extends StatelessWidget {
       children: [
         MacroNutrientItem(
             name: 'Protein',
-            value: '${summary.proteinConsumed.toInt()}g / ${summary.proteinGoal.toInt()}g',
+            value:
+                '${summary.proteinConsumed.toInt()}g / ${summary.proteinGoal.toInt()}g',
             color: Colors.blue),
         MacroNutrientItem(
             name: 'Fats',
-            value: '${summary.fatsConsumed.toInt()}g / ${summary.fatsGoal.toInt()}g',
+            value:
+                '${summary.fatsConsumed.toInt()}g / ${summary.fatsGoal.toInt()}g',
             color: Colors.orange),
         MacroNutrientItem(
             name: 'Carbs',
-            value: '${summary.carbsConsumed.toInt()}g / ${summary.carbsGoal.toInt()}g',
+            value:
+                '${summary.carbsConsumed.toInt()}g / ${summary.carbsGoal.toInt()}g',
             color: Colors.yellow),
       ],
     );
   }
 
-  Widget _buildRedoTestButton() {
+  // ---- PERUBAHAN 2: Metode ini sekarang menerima context dan memiliki logika navigasi ----
+  Widget _buildRedoTestButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          // Navigasi ke halaman onboarding 2 menggunakan rute bernama
+          Navigator.pushNamed(context, '/onboarding2');
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFCB5E59),
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -342,12 +369,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCards(BuildContext context, HomeViewModel viewModel, NutritionSummary summary) {
+  Widget _buildInfoCards(
+      BuildContext context, HomeViewModel viewModel, NutritionSummary summary) {
     return Row(
       children: [
         Expanded(
           child: InfoCard(
-            value: '${summary.waterConsumedLiters}/${summary.waterGoalLiters}',
+            value:
+                '${summary.waterConsumedLiters.toStringAsFixed(1)}/${summary.waterGoalLiters.toStringAsFixed(1)}',
             unit: 'litres',
             message: "You're doing good,\nKeep it up!",
             primaryColor: const Color(0xFFA2C9FA),
