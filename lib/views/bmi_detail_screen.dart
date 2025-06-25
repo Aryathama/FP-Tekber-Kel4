@@ -1,16 +1,21 @@
+// Lokasi file: lib/views/onboarding/bmi_detail_screen.dart
+
 import 'package:flutter/material.dart';
-import '../viewmodels/bmi_detail_viewmodel.dart'; // Sesuaikan path
-import '/models/user_profile.dart'; // Untuk meneruskan data
 import 'package:provider/provider.dart';
-// Jika Anda punya HomePage, import di sini:
-// import 'package:onboarding_app/views/home_page.dart';
+
+// Sesuaikan path ini dengan struktur folder Anda
+import '../viewmodels/bmi_detail_viewmodel.dart';
+import '../viewmodels/home_viewmodel.dart';
+import 'home_page.dart';
+import '../../models/user_profile.dart'; // Mungkin diperlukan untuk data lain
 
 class BMIDetailScreen extends StatelessWidget {
-  // BMI Detail Screen tidak lagi menerima data langsung di konstruktor,
-  // melainkan mengambil dari ViewModel yang disediakan oleh Provider.
+  const BMIDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Menggunakan Consumer untuk mendapatkan data dari BMIDetailViewModel.
+    // Pastikan ViewModel ini sudah di-provide di alur navigasi sebelumnya.
     return Consumer<BMIDetailViewModel>(
       builder: (context, viewModel, child) {
         return Scaffold(
@@ -26,8 +31,8 @@ class BMIDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40),
-                  Text(
+                  const SizedBox(height: 40),
+                  const Text(
                     "Our plan for you is",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -45,7 +50,7 @@ class BMIDetailScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Text(
                     "${viewModel.bmi.toStringAsFixed(0)} BMI",
                     textAlign: TextAlign.center,
@@ -55,12 +60,12 @@ class BMIDetailScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
                       text: 'Your BMI category is ',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
@@ -77,13 +82,14 @@ class BMIDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 40),
-
+                  const SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildUserInfoColumn(
-                        icon: viewModel.gender == Gender.male ? Icons.male : Icons.female,
+                        icon: viewModel.gender == Gender.male
+                            ? Icons.male
+                            : Icons.female,
                         label: 'Gender',
                         value: viewModel.genderText,
                       ),
@@ -104,44 +110,48 @@ class BMIDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 40),
-
+                  const SizedBox(height: 40),
                   _buildBMICategoryRow('Underweight', '< 18.5', Colors.blue),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _buildBMICategoryRow('Normal', '18.5 - 24.9', Colors.green),
-                  SizedBox(height: 10),
-                  _buildBMICategoryRow('Overweight', '25 - 29.9', Colors.orange),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
+                  _buildBMICategoryRow(
+                      'Overweight', '25 - 29.9', Colors.orange),
+                  const SizedBox(height: 10),
                   _buildBMICategoryRow('Obese', '> 30', Colors.red),
-
-                  Spacer(),
-
+                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: ElevatedButton(
+                      // --- INI ADALAH BAGIAN YANG DIPERBAIKI ---
                       onPressed: () {
-                        print('Go to Homepage pressed!');
-                        // Anda bisa menavigasi ke HomePage di sini.
-                        // Contoh:
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => Text('Welcome to Homepage!')), // Ganti dengan HomePage() Anda
-                          (Route<dynamic> route) => false, // Hapus semua route sebelumnya
+                          MaterialPageRoute(
+                            builder: (context) {
+                              // Bungkus halaman tujuan dengan ChangeNotifierProvider di sini
+                              return ChangeNotifierProvider(
+                                create: (context) => HomeViewModel(), // Buat instance ViewModel baru
+                                child: const HomePage(), // Halaman tujuan Anda
+                              );
+                            },
+                          ),
+                          (Route<dynamic> route) => false, // Hapus semua halaman sebelumnya
                         );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green[600],
                         foregroundColor: Colors.white,
-                        minimumSize: Size(double.infinity, 55),
+                        minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: 0,
                       ),
-                      child: Text(
+                      child: const Text(
                         'Go to Homepage →',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -154,6 +164,7 @@ class BMIDetailScreen extends StatelessWidget {
     );
   }
 
+  // Helper widget untuk menampilkan info user (gender, umur, dll)
   Widget _buildUserInfoColumn({
     required IconData icon,
     required String label,
@@ -162,7 +173,7 @@ class BMIDetailScreen extends StatelessWidget {
     return Column(
       children: [
         Icon(icon, size: 30, color: Colors.grey[700]),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           label,
           style: TextStyle(
@@ -171,10 +182,10 @@ class BMIDetailScreen extends StatelessWidget {
             fontWeight: FontWeight.normal,
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -184,6 +195,7 @@ class BMIDetailScreen extends StatelessWidget {
     );
   }
 
+  // Helper widget untuk menampilkan baris kategori BMI
   Widget _buildBMICategoryRow(String category, String range, Color dotColor) {
     return Row(
       children: [
@@ -195,11 +207,11 @@ class BMIDetailScreen extends StatelessWidget {
             color: dotColor,
           ),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Expanded(
           child: Text(
             category,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black87,
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -208,7 +220,7 @@ class BMIDetailScreen extends StatelessWidget {
         ),
         Text(
           range,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black87,
             fontSize: 16,
             fontWeight: FontWeight.w500,
