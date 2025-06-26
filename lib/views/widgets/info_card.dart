@@ -1,59 +1,82 @@
+// lib/views/widgets/info_card.dart
+
 import 'package:flutter/material.dart';
 
 class InfoCard extends StatelessWidget {
-  final Color color;
   final String value;
   final String unit;
   final String message;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final VoidCallback? onTap;
 
   const InfoCard({
     super.key,
-    required this.color,
     required this.value,
     required this.unit,
     required this.message,
+    required this.primaryColor,
+    required this.secondaryColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        height: 180,
         decoration: BoxDecoration(
-          color: color,
           borderRadius: BorderRadius.circular(20),
+          color: secondaryColor,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  width: double.infinity,
+                  color: primaryColor,
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        value,
+                        style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      Text(
+                        unit,
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            Text(
-              unit,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.white70,
+              Expanded(
+                flex: 2,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  child: Center(
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              message,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
