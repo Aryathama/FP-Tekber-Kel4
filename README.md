@@ -2,6 +2,8 @@
 
 Nutricore membantu pengguna melacak nutrisi, memantau BMI, dan mengelola tujuan kesehatan pribadi. Aplikasi ini memiliki fitur autentikasi pengguna, proses onboarding untuk pengaturan profil awal, perhitungan BMI dengan rencana kesehatan yang dipersonalisasi, dasbor utama untuk memantau kalori dan makro-nutrisi, pelacakan asupan air, pencarian informasi nutrisi makanan melalui API, dan notifikasi pengingat.
 
+NOTE: Seluruh commit pada tanggal 25 Juni 2025 dihitung sebagai kontribusi bersama dikarenakan kode dikerjakan di satu laptop yang sama.
+
 ## Anggota Kelompok
 
 * **Tommy Gunawan** - NRP: 5026221037
